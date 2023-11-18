@@ -100,7 +100,9 @@ module OpenAI
     end
 
     def configure_json_post_request(req, parameters)
-      req_parameters = parameters.dup
+      req.options.proxy = parameters[:proxy] if parameters[:proxy].present?
+
+      req_parameters = parameters.dup.except(:proxy)
 
       if parameters[:stream].respond_to?(:call)
         req.options.on_data = to_json_stream(user_proc: parameters[:stream])
